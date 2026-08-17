@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lofoten Checkliste · 14.–23.08.2026</title>
+<style>
+  :root{
+    --navy:#0f1c2b; --navy-deep:#0a141f; --panel:#132639; --panel-2:#16304a;
+    --line:#28405a; --ink:#f0ece2; --ink-dim:#a9bcce;
+    --gold:#e6a33d; --teal:#4fb8ac; --green:#7fae5f; --blue:#5b8fd9; --red:#d9704f;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--navy);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}
+  h1,h2,h3{font-family:Georgia,'Iowan Old Style',serif;font-weight:600;margin:0;}
+
+  header{padding:20px 20px 16px;background:linear-gradient(180deg,var(--navy-deep),var(--navy));
+    border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;}
+  header .eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:var(--gold);
+    margin-bottom:6px;font-weight:700;}
+  header h1{font-size:22px;}
+  header .sub{color:var(--ink-dim);font-size:13.5px;margin-top:6px;line-height:1.5;}
+
+  .progress-wrap{margin-top:14px;}
+  .progress-track{height:8px;border-radius:5px;background:var(--panel);overflow:hidden;border:1px solid var(--line);}
+  .progress-bar{height:100%;background:linear-gradient(90deg,var(--teal),var(--gold));width:0%;transition:width .2s ease;}
+  .progress-label{font-size:12px;color:var(--ink-dim);margin-top:6px;display:flex;justify-content:space-between;}
+  .progress-label button{background:none;border:none;color:var(--ink-dim);font-size:12px;text-decoration:underline;
+    cursor:pointer;padding:0;}
+  .progress-label button:hover{color:var(--red);}
+
+  main{max-width:720px;margin:0 auto;padding:16px 16px 60px;}
+
+  .item{background:var(--panel);border:1px solid var(--line);border-radius:10px;margin-bottom:10px;overflow:hidden;}
+  .item.done{opacity:.55;}
+  .item-head{display:flex;align-items:flex-start;gap:12px;padding:13px 14px;cursor:pointer;}
+  .checkbox{
+    flex:0 0 auto;width:22px;height:22px;border-radius:6px;border:2px solid var(--line);
+    display:flex;align-items:center;justify-content:center;margin-top:2px;transition:all .15s ease;
+    background:var(--navy-deep);
+  }
+  .checkbox svg{width:14px;height:14px;opacity:0;transition:opacity .1s ease;}
+  .item.done .checkbox{background:var(--teal);border-color:var(--teal);}
+  .item.done .checkbox svg{opacity:1;}
+  .head-text{flex:1;min-width:0;}
+  .head-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .tag{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;padding:2px 7px;border-radius:5px;
+    color:var(--navy-deep);font-weight:700;}
+  .daytag{font-size:10.5px;color:var(--ink-dim);border:1px solid var(--line);padding:2px 7px;border-radius:5px;}
+  .item h3{font-size:15.5px;margin-top:6px;color:var(--ink);}
+  .item.done h3{text-decoration:line-through;color:var(--ink-dim);}
+  .chevron{flex:0 0 auto;color:var(--ink-dim);font-size:13px;margin-top:4px;transition:transform .15s ease;}
+  .item.open .chevron{transform:rotate(90deg);}
+
+  .item-body{max-height:0;overflow:hidden;transition:max-height .2s ease;padding:0 14px;}
+  .item.open .item-body{max-height:400px;padding:0 14px 14px;}
+  .item-body p{font-size:13.5px;line-height:1.55;color:var(--ink-dim);margin:0 0 8px;}
+  .item-body .meta{font-size:12.5px;color:var(--gold);margin-bottom:8px;}
+  .item-body .warn{font-size:12.5px;color:#ffd9c9;background:rgba(217,112,79,.18);
+    border:1px solid rgba(217,112,79,.4);border-radius:6px;padding:6px 9px;margin-bottom:8px;line-height:1.45;}
+  .item-body .links{display:flex;gap:8px;flex-wrap:wrap;}
+  .item-body a.link{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:600;
+    color:var(--navy-deep);background:var(--teal);padding:6px 11px;border-radius:6px;text-decoration:none;}
+  .item-body a.link.gmaps{background:transparent;color:var(--ink-dim);border:1px solid var(--line);}
+
+  .filters{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 4px;}
+  .filter{font-size:12px;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:var(--panel);
+    color:var(--ink-dim);cursor:pointer;}
+  .filter.active{background:var(--gold);border-color:var(--gold);color:var(--navy-deep);font-weight:600;}
+
+  .storage-note{font-size:11.5px;color:var(--ink-dim);opacity:.7;margin-top:16px;line-height:1.5;text-align:center;}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Lofoten · 14.–23.08.2026</div>
+  <h1>Aktivitäten-Checkliste</h1>
+  <div class="sub">Antippen öffnet Details, Häkchen speichert lokal im Browser dieses Geräts.</div>
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+    <div class="progress-label">
+      <span id="progressText">0 / 0 erledigt</span>
+      <button id="resetBtn">Alle zurücksetzen</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="filters" id="filters"></div>
+  <div id="list"></div>
+  <div class="storage-note">Status wird per localStorage nur in diesem Browser auf diesem Gerät gespeichert — kein Abgleich zwischen Geräten. Beim Löschen der Browserdaten geht der Fortschritt verloren.</div>
+</main>
+
+<script>
+const CAT = {
+  basis:  {color:'#8FA3B8', label:'Basis / Transfer'},
+  kultur: {color:'#e6a33d', label:'Kultur & Museum'},
+  strand: {color:'#4fb8ac', label:'Strand & Küste'},
+  wandern:{color:'#7fae5f', label:'Wandern'},
+  boot:   {color:'#5b8fd9', label:'Boot & Fjord'},
+  wal:    {color:'#d9704f', label:'Walbeobachtung'}
+};
+
+const stops = [
+  {id:'ankunft', day:1, name:'Ankunft & Unterkunft Vestvågøy (z. B. Ballstad)', cat:'basis',
+   blurb:'Flughafen Leknes (LKN) oder Harstad/Narvik + Anreise, Mietwagen-Übernahme, Check-in. Ballstad als Beispielort — je nach gebuchter Unterkunft in Vestvågøy anpassen.'},
+
+  {id:'lofotr', day:2, name:'Lofotr Vikingmuseum, Borg', cat:'kultur',
+   blurb:'Rekonstruiertes 83-m-Wikinger-Langhaus, Ausgrabungsstätte, Tiergehege. Nur 14 km von Leknes.',
+   meta:'(certain) Öffnungszeiten 14.–15.08: tägl. 10–19 Uhr · ab 16.08: tägl. 10–17 Uhr · Erwachsene 265 NOK',
+   warn:'(certain) Das Lofotr Vikingfestival findet 2026 nicht statt (offizielle Ansage des Museums, Jan. 2026).',
+   link:'https://www.lofotr.no/en/', linkLabel:'lofotr.no'},
+
+  {id:'unstad', day:2, name:'Unstad Beach', cat:'strand',
+   blurb:'Bekannter Arctic-Surf-Spot, dramatische Bergkulisse. Auch ohne Surfbrett ein schöner Nachmittagsstopp.',
+   meta:'(guessing) Frei zugänglich, keine festen Öffnungszeiten',
+   link:'https://nerdnomads.com/lofoten-travel-guide', linkLabel:'Reiseführer-Hintergrund'},
+
+  {id:'haukland', day:3, name:'Haukland Beach', cat:'strand',
+   blurb:'Von Lonely Planet als einer der schönsten Strände Europas gelistet — weißer Sand, türkises Wasser.',
+   meta:'(guessing) Frei zugänglich, kostenpflichtiger Parkplatz in der Saison',
+   link:'https://nerdnomads.com/lofoten-travel-guide', linkLabel:'Reiseführer-Hintergrund'},
+
+  {id:'uttakleiv', day:3, name:'Uttakleiv Beach', cat:'strand',
+   blurb:'Direkt neben Haukland, ruhiger, bekannt für Mitternachtssonne und Felsformationen am Strandende.',
+   link:'https://nerdnomads.com/lofoten-travel-guide', linkLabel:'Reiseführer-Hintergrund'},
+
+  {id:'eggum', day:3, name:'Eggum', cat:'strand',
+   blurb:'Kleiner Ort an der Westküste, offener Blick auf den Atlantik, guter Spot für Mitternachtssonne.',
+   link:'https://nerdnomads.com/lofoten-travel-guide', linkLabel:'Reiseführer-Hintergrund'},
+
+  {id:'wal-andenes', day:4, name:'Walbeobachtung: Tagestour ab Svolvær → Andenes', cat:'wal',
+   blurb:'Abholung am Hotel, Fahrt über Vesterålen nach Andenes, dort RIB-Bootstour. Ziel: Buckelwal, Zwergwal, ggf. Pottwal/Orca. Kleingruppe (max. 12), Mindestteilnehmerzahl 6.',
+   meta:'(certain) Dauer ca. 12 Std. gesamt · Buchung vorab nötig, wetterabhängig',
+   warn:'(certain) Echte Walsafaris starten NICHT auf Lofoten, sondern in Andenes/Stø (Vesterålen), 278 km / ~4 Std. 10 Min. Fahrzeit von Leknes je Strecke. Diese Tour übernimmt den Transfer.',
+   link:'https://www.viator.com/de-DE/tours/Lofoten/WHALE-WATCHING/d33309-18105P8', linkLabel:'Tour ansehen (Viator)'},
+
+  {id:'wal-sto', day:4, name:'Alternative: Selbstfahrer-Walsafari ab Stø', cat:'wal',
+   blurb:'Falls ihr lieber selbst fahrt oder mit Zwischenstopp in Vesterålen kombiniert: Sommersaison 1. Juni–31. August, Abfahrt direkt in Stø.',
+   meta:'(certain) Saison bestätigt bis 31.08. · Fahrzeit Leknes–Stø ähnlich lang wie nach Andenes',
+   link:'https://www.arcticwhaletours.com/sommer-wal-safari-in-sto', linkLabel:'Arctic Whale Tours'},
+
+  {id:'henningsvaer', day:5, name:'Henningsvær', cat:'kultur',
+   blurb:'"Venedig des Nordens" — Inseldorf über Brücken verbunden, Kunstgalerien (u. a. Kaviar Factory), berühmter Fußballplatz am Fjord.',
+   link:'https://www.visitnorway.com/places-to-go/northern-norway/the-lofoten-islands/', linkLabel:'Visit Norway'},
+
+  {id:'svolvaer', day:6, name:'Svolvær', cat:'kultur',
+   blurb:'Größter Ort auf Lofoten, guter Ausgangspunkt für Fjordtouren, Restaurants und Häfen.',
+   link:'https://www.visitnorway.com/places-to-go/northern-norway/the-lofoten-islands/', linkLabel:'Visit Norway'},
+
+  {id:'trollfjord', day:6, name:'Trollfjord RIB-Safari', cat:'boot',
+   blurb:'Schmaler, spektakulärer Fjord zwischen 1000 m hohen Bergen, Abfahrt ab Svolvær. Chance auf Seeadler.',
+   meta:'(guessing) Vorab online buchen empfohlen, Treffpunkt Svolvær',
+   link:'https://trollfjordcruise.com/ribsafari/', linkLabel:'Trollfjord Cruise'},
+
+  {id:'reine', day:7, name:'Reine', cat:'kultur',
+   blurb:'Postkarten-Fischerdorf auf Stelzen im Fjord, Ausgangspunkt für Reinebringen.',
+   link:'https://visitlofoten.com/en/guide/reinebringen-hike/', linkLabel:'visitlofoten.com'},
+
+  {id:'reinebringen', day:7, name:'Reinebringen (448 m)', cat:'wandern',
+   blurb:'Ikonischer Aussichtsberg über Reine, ca. 1.500–2.000 Sherpa-Steinstufen, 2–3 Std. Auf-/Abstieg. Sehr steil, bei Nässe rutschig.',
+   meta:'(guessing) Beste Zeit: klarer Tag, wenig Wind',
+   warn:'(likely) Der Weg wurde 2024–2026 wegen Steinschlaggefahr wiederholt komplett gesperrt. Status vorher zwingend prüfen.',
+   link:'https://visitlofoten.com/en/guide/reinebringen-hike/', linkLabel:'Aktueller Status'},
+
+  {id:'a-i-lofoten', day:8, name:'Å i Lofoten – Fischereidorf-Museum', cat:'kultur',
+   blurb:'Ende der E10, komplettes Museumsdorf: Bootshäuser, Schmiede, Bäckerei (Ofen von 1878), Trankocherei.',
+   meta:'(likely, Preise ggf. nicht mehr aktuell) Sommer-Öffnungszeiten ca. 20.06.–20.08. tägl. 10–17:30 Uhr, danach reduziert',
+   link:'https://www.museumnord.no/en/our-venues/norsk-fiskevaersmuseum/', linkLabel:'Museum Nord'},
+
+  {id:'nusfjord', day:8, name:'Nusfjord', cat:'kultur',
+   blurb:'Eines der besterhaltenen historischen Fischerdörfer Norwegens, seit einigen Jahren kostenpflichtiger Zugang zum Dorfkern.',
+   meta:'(likely) Eintritt kostenpflichtig, genaue Tarife auf der offiziellen Seite prüfen',
+   link:'https://nusfjord.com/', linkLabel:'nusfjord.com'},
+
+  {id:'kvalvika-ryten', day:9, name:'Kvalvika Beach & Ryten (543 m)', cat:'wandern',
+   blurb:'Wanderung ab Fredvang zum goldenen Kvalvika-Strand, optional weiter zum Ryten-Gipfel mit Panoramablick. Moderater, gut ausgebauter Weg.',
+   meta:'(certain) Parkplatz Ryten-Trailhead: 68.0746, 13.1373 · Parkgebühr ca. 50–100 NOK/Tag',
+   link:'https://visitlofoten.com/en/guide/kvalvika-and-ryten-543-m/', linkLabel:'visitlofoten.com'},
+
+  {id:'abreise', day:10, name:'Rückgabe Mietwagen & Abreise', cat:'basis',
+   blurb:'Rückfahrt zum Flughafen Leknes (oder gebuchtem Abreisepunkt), Fahrzeugrückgabe, Rückflug.'}
+];
+
+const STORAGE_KEY = 'lofoten-checklist-2026';
+let state = {};
+try{
+  state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+}catch(e){ state = {}; }
+
+let activeFilter = 'all';
+
+function save(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){ /* storage unavailable */ }
+}
+
+function checkIcon(){
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="#0f1c2b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+}
+
+function renderFilters(){
+  const wrap = document.getElementById('filters');
+  wrap.innerHTML = '';
+  const allBtn = document.createElement('div');
+  allBtn.className = 'filter' + (activeFilter==='all' ? ' active' : '');
+  allBtn.textContent = 'Alle';
+  allBtn.onclick = () => { activeFilter='all'; render(); };
+  wrap.appendChild(allBtn);
+  Object.keys(CAT).forEach(k => {
+    const b = document.createElement('div');
+    b.className = 'filter' + (activeFilter===k ? ' active' : '');
+    b.textContent = CAT[k].label;
+    b.onclick = () => { activeFilter = k; render(); };
+    wrap.appendChild(b);
+  });
+}
+
+function render(){
+  renderFilters();
+  const list = document.getElementById('list');
+  list.innerHTML = '';
+  const items = activeFilter==='all' ? stops : stops.filter(s=>s.cat===activeFilter);
+
+  items.forEach(s => {
+    const done = !!state[s.id];
+    const c = CAT[s.cat];
+    const item = document.createElement('div');
+    item.className = 'item' + (done ? ' done' : '');
+    item.id = 'item-' + s.id;
+
+    const head = document.createElement('div');
+    head.className = 'item-head';
+    head.innerHTML = `
+      <div class="checkbox">${checkIcon()}</div>
+      <div class="head-text">
+        <div class="head-top">
+          <span class="tag" style="background:${c.color}">${c.label}</span>
+          <span class="daytag">Tag ${s.day}</span>
+        </div>
+        <h3>${s.name}</h3>
+      </div>
+      <div class="chevron">▸</div>
+    `;
+    const body = document.createElement('div');
+    body.className = 'item-body';
+    body.innerHTML = `
+      <p>${s.blurb}</p>
+      ${s.meta ? `<div class="meta">${s.meta}</div>` : ''}
+      ${s.warn ? `<div class="warn">⚠ ${s.warn}</div>` : ''}
+      <div class="links">
+        ${s.link ? `<a class="link" href="${s.link}" target="_blank" rel="noopener">${s.linkLabel} →</a>` : ''}
+      </div>
+    `;
+
+    head.querySelector('.checkbox').addEventListener('click', (e) => {
+      e.stopPropagation();
+      state[s.id] = !state[s.id];
+      save();
+      render();
+    });
+    head.addEventListener('click', () => {
+      item.classList.toggle('open');
+    });
+
+    item.appendChild(head);
+    item.appendChild(body);
+    list.appendChild(item);
+  });
+
+  updateProgress();
+}
+
+function updateProgress(){
+  const total = stops.length;
+  const doneCount = stops.filter(s => state[s.id]).length;
+  document.getElementById('progressBar').style.width = (total ? (doneCount/total*100) : 0) + '%';
+  document.getElementById('progressText').textContent = doneCount + ' / ' + total + ' erledigt';
+}
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  if(confirm('Wirklich alle Häkchen zurücksetzen?')){
+    state = {};
+    save();
+    render();
+  }
+});
+
+render();
+</script>
+</body>
+</html>
